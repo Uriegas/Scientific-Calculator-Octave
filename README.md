@@ -105,5 +105,75 @@ De igual manera se deberá tener lo siguiente:
 
   1. Código de la implementación documentado mediante JavaDoc.
   2. Se deberá generar el archivo Jar => **Se subirá a plataforma google classroom**
-  3. Se deberá generar un reporte de actividades en formato PDF => **Se subirá a plataforma google classroom**
+  3. Se deberá generar un reporte de actividades en formato PDF => **Se subirá a plataforma google classroom**  
 
+
+------
+## División del trabajo
+------
+Cada integrante realiza una parte del proyecto junto con sus pruebas unitarias, escribiendo en la bitácora y pruebas unitarias los avances.
+
+### **Ecuaciones con multiples variables**
+1. Hacer los cambios necesarios a la calculadroa para que soporte multiples variables.
+2. Cada ecuación debe ser igual a una variable.
+
+### **Interfaz y Arreglos a la calculadora**
+1. Cuando la ecuación ingresada tenga una sola variable solicitar su valor, en el caso contrario un archivo con las variables.
+2. Se debe poder ingresar un array de valores para x.
+
+### **Lectura archivo .equ**
+
+Instrucciones:
+1. Crear una clase llamada EquationsReader que lea un archivo con terminacion ".equ".
+2. La clase debe de tener la sig. función ArrayList<ExpressionTree> readEquations(String path).
+	Recibe la ruta del archivo .equ, lo lee y pasa las ecuaciones a la calculadora para un ExpressionTree de cada ecuación, los cuales guarda en un array que retorna al final.
+
+El programa **no** debe tronar cuando:
+1. Se lee una ecuación con sintaxis incorrecta
+2. Se lee texto que no es una ecuación
+3. El archivo no existe
+
+Pruebas Unitarias:
+Prueba de funcionamiento
+1. Guardar en un archivo ecuaciones.equ las siguientes ecuaciones:
+3x + 2
+sin(x+3)*sqrt(2)
+2^(12-4*(2*x))
+3x_1 + 2x_2^3 + 2
+
+2. Instancir la clase EquationsReader y usar la funcion readEquations.
+3. Crear las ecuaciones a ExpressionTree manualmente
+4. Comprobar que cada ecuación en el ArrayList esta correctamente creada comparandola a las ecuaciones creadas manualmente.
+
+Prueba de no tronar (Expeciones)
+1. Guardar en un archivo ecuaciones.equ las siguientes ecuaciones:
+3x+%
+12*sin()
+2*41+
+80*12**
+
+2. Instancir la clase EquationsReader y usar la funcion readEquations.
+3. Comprobar que el programa no retorne una expeción (el programa maneja las expeciones)
+
+
+### **Lectura .xlsx**
+Instrucciones:
+1. Crear una clase ReadVariables
+2. Crear una funcion HashTable<Token, Float> readVarFile(String path).
+	Recibe la dirección del archivo, lo lee y crea una tabla tipo HashTable con la que se pueda consultar los datos ingresando el nombre de la variable.
+	Se pasa la variable a la tabla y retorna un array de floats.
+	Ejemplo: table.get("x_1") --->  [7, 8, 7, 5, 15, 70]
+
+Pruebas Unitarias:
+1. Instanciar la clase y usarla.
+2. Comprobar que la tabla retorna cada array de floats correspondiente a su variable.
+
+### **Salida a .txt**
+Instrucciones:
+1. Crear una función: void writeToFile(String name). Implementada en Calculator.java
+	Recibe el nombre del archivo sin la extension y escribe los resultados de las ecuaciones cargadas en Calculator.
+
+Pruebas Unitarias:
+1. Usar la funcion para crear el archivo.
+2. Leer el archivo recien creado
+3. Comprobar que lo escrito es lo mismo que lo leido.
