@@ -17,11 +17,17 @@ public class Tokenizer {
         //Defining tokens meaning (Tokens grammar)
         tknmeaning.add(new TknMeaning(1, "\\+|-"));
         tknmeaning.add(new TknMeaning(2, "\\*|/"));
-        tknmeaning.add(new TknMeaning(3, "\\("));
-        tknmeaning.add(new TknMeaning(4, "\\)"));
+        tknmeaning.add(new TknMeaning(3, "\\(|\\["));
+        tknmeaning.add(new TknMeaning(4, "\\)|\\]"));
         tknmeaning.add(new TknMeaning(5, "sin|cos|tan|sqrt|\\^"));
         tknmeaning.add(new TknMeaning(6, "[0-9]+"));//Warning: maybe wrong
-        tknmeaning.add(new TknMeaning(7, "[a-zA-Z][a-zA-Z0-9_]*"));
+        tknmeaning.add(new TknMeaning(13, "(\\w+\\.\\w+)"));//File
+        tknmeaning.add(new TknMeaning(7, "[a-zA-Z][a-zA-Z0-9_]*"));//Variable
+        tknmeaning.add(new TknMeaning(8, "\\="));
+        tknmeaning.add(new TknMeaning(9, "save"));
+        tknmeaning.add(new TknMeaning(10, "read"));
+        tknmeaning.add(new TknMeaning(11, "\\'"));
+        tknmeaning.add(new TknMeaning(12, "\\,"));
     }
     /**
      * Algorithm to convert a strin into tokens
@@ -50,7 +56,7 @@ public class Tokenizer {
                     break;
                 }
             }
-            if(!match) throw new TokenizerException();
+            if(!match) throw new TokenizerException("Invalid input in: " + s);
         }
     }
     /**
