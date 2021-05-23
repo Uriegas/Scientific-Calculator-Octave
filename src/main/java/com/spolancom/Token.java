@@ -17,6 +17,9 @@ enum Token_Type{
 public class Token {
     private Token_Type type;
     private String value;
+    
+    //New attribute
+    private int token_type;
     /**
      * Initializer for Numbers
      * @param v The value of the token
@@ -48,6 +51,15 @@ public class Token {
             case "x": type = Token_Type.VARIABLE; break;
             default: type = Token_Type.UNDEFINED; break;
         }
+    }
+    /**
+     * Simple constructor used in the Tokenizer
+     * @param t
+     * @param v
+     */
+    public Token(int t, String v){
+        token_type = t;
+        value = v;
     }
     /**
      * Returns token's value
@@ -176,6 +188,6 @@ public class Token {
      * Boring toString
      */
     public String toString(){
-        return value.toString();
+        return token_type + ": " + value;
     }
 }

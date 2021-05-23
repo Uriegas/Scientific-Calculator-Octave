@@ -5,7 +5,7 @@ package com.spolancom;
  * in the Tokenizer
  */
 public class TknMeaning {
-    private static int tokenType;//For meanning
+    private int tokenType;//For meanning
     private String regex;//For searching
     
     /**
