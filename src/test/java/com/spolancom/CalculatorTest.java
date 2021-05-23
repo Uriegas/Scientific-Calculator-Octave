@@ -42,4 +42,18 @@ public class CalculatorTest {
         while(!result.empty() && !input.empty())
             assertEquals(result.pop(), c.eval(c.toRPN(c.Tokenizer(input.pop()))).getNumber(), 0.01);
     }
+
+    /**
+     * Test for the multiple variable expression
+     */
+    @Test
+    public void testTokenizer() throws TokenizerException{
+        //Adding multivariable expression to input stack
+        input.add("2*x_1+15*x_2");
+        Tokenizer tokenizer = new Tokenizer();
+        for(String in : input ){
+            tokenizer.tokenize(in);
+            System.out.println( tokenizer.toString() );
+        }
+    }
 }
