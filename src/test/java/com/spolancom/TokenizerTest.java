@@ -1,5 +1,7 @@
 package com.spolancom;
 
+import static org.junit.Assert.*;
+
 import java.util.Stack;
 import org.junit.Test;
 
@@ -21,5 +23,9 @@ public class TokenizerTest {
             tokenizer.tokenize(in);
             System.out.println( tokenizer.toString() );
         }
+        Stack<String> result = new Stack<String>();
+        result.add("[\n7: save\n3: (\n7: f1\n3: (\n7: data\n4: )\n12: ,\n11: '\n13: output.txt\n11: '\n4: )\n0: null\n]\n");
+        System.out.println(result.lastElement());
+        assertEquals(tokenizer.toString(), result.lastElement());
     }
 }
