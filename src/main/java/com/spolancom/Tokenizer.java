@@ -19,13 +19,12 @@ public class Tokenizer {
         tknmeaning.add(new TknMeaning(2, "\\*|/"));
         tknmeaning.add(new TknMeaning(3, "\\(|\\["));
         tknmeaning.add(new TknMeaning(4, "\\)|\\]"));
-        tknmeaning.add(new TknMeaning(5, "sin|cos|tan|sqrt|\\^"));
-        tknmeaning.add(new TknMeaning(6, "[0-9]+"));//Warning: maybe wrong
+        tknmeaning.add(new TknMeaning(5, "sin|cos|tan|sqrt|\\^|read"));
+        tknmeaning.add(new TknMeaning(6, "[0-9]+"));
         tknmeaning.add(new TknMeaning(13, "(\\w+\\.\\w+)"));//File
         tknmeaning.add(new TknMeaning(7, "[a-zA-Z][a-zA-Z0-9_]*"));//Variable
         tknmeaning.add(new TknMeaning(8, "\\="));
-        tknmeaning.add(new TknMeaning(9, "save"));
-        tknmeaning.add(new TknMeaning(10, "read"));
+        tknmeaning.add(new TknMeaning(9, "save"));//Special function (2 parameters)
         tknmeaning.add(new TknMeaning(11, "\\'"));
         tknmeaning.add(new TknMeaning(12, "\\,"));
     }
@@ -39,7 +38,7 @@ public class Tokenizer {
         //Init tokens
         tokens.clear();
         //Remove white spaces
-        s = s.trim();
+        s = s.replaceAll(" ", "");
         //Removes implicit multiplication converting to explicit
         //Ex. [2x+xy] --> [2 * x + x * y]
         //s = s.replaceAll("(\\d+|\\))\\w", "$1*\\w"); //\\w not working
@@ -58,6 +57,7 @@ public class Tokenizer {
             }
             if(!match) throw new TokenizerException("Invalid input in: " + s);
         }
+        tokens.add(new Token(Token.EPSILON, null));//Add end of line token
     }
     /**
      * Get the list of tokens

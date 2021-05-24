@@ -15,6 +15,16 @@ enum Token_Type{
  * Applying the type and the value (string)
  */
 public class Token {
+    public static final int EPSILON = 0;
+    public static final int PLUSMINUS = 1;
+    public static final int MULTDIV = 2;
+    public static final int POW = 3;
+    public static final int FUNCTION = 4;
+    public static final int OPEN_PARENTHESIS = 5;
+    public static final int CLOSE_PARENTHESIS = 6;
+    public static final int NUMBER = 7;
+    public static final int VARIABLE = 8;
+    public static final int EQUALS = 9;
     private Token_Type type;
     private String value;
     
@@ -60,6 +70,10 @@ public class Token {
     public Token(int t, String v){
         token_type = t;
         value = v;
+    }
+
+    public int getToken(){
+        return token_type;
     }
     /**
      * Returns token's value
