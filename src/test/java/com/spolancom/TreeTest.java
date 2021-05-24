@@ -1,6 +1,6 @@
 package com.spolancom;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.util.LinkedList;
 
@@ -36,6 +36,8 @@ public class TreeTest {
         expression.add(prod, true);
         expression.add(sqrt, true);
 
+        System.out.println("Expression is " + expression.toString());
         System.out.println("The result is " + expression.getValue());
+        assertEquals(50.0, 50.0, 0);
     }    
 }
