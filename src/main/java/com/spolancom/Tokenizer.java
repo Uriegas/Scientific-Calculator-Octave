@@ -15,18 +15,18 @@ public class Tokenizer {
         tokens = new LinkedList<Token>();
         tknmeaning = new LinkedList<TknMeaning>();
         //Defining tokens meaning (Tokens grammar)
-        tknmeaning.add(new TknMeaning(1, "\\+|-"));
-        tknmeaning.add(new TknMeaning(2, "\\*|/"));
-        tknmeaning.add(new TknMeaning(3, "\\(|\\["));
-        tknmeaning.add(new TknMeaning(4, "\\)|\\]"));
-        tknmeaning.add(new TknMeaning(5, "sin|cos|tan|sqrt|\\^|read"));
-        tknmeaning.add(new TknMeaning(6, "[0-9]+"));
-        tknmeaning.add(new TknMeaning(13, "(\\w+\\.\\w+)"));//File
-        tknmeaning.add(new TknMeaning(7, "[a-zA-Z][a-zA-Z0-9_]*"));//Variable
-        tknmeaning.add(new TknMeaning(8, "\\="));
-        tknmeaning.add(new TknMeaning(9, "save"));//Special function (2 parameters)
-        tknmeaning.add(new TknMeaning(11, "\\'"));
-        tknmeaning.add(new TknMeaning(12, "\\,"));
+        tknmeaning.add(new TknMeaning(Token.PLUSMINUS, "\\+|-"));
+        tknmeaning.add(new TknMeaning(Token.MULTDIV, "\\*|/"));
+        tknmeaning.add(new TknMeaning(Token.OPEN_PARENTHESIS, "\\(|\\["));
+        tknmeaning.add(new TknMeaning(Token.CLOSE_PARENTHESIS, "\\)|\\]"));
+        tknmeaning.add(new TknMeaning(Token.FUNCTION, "sin|cos|tan|sqrt|\\^|read"));
+        tknmeaning.add(new TknMeaning(Token.NUMBER, "[0-9]+"));
+        tknmeaning.add(new TknMeaning(Token.VARIABLE, "(\\w+\\.\\w+)"));//File
+        tknmeaning.add(new TknMeaning(Token.VARIABLE, "[a-zA-Z][a-zA-Z0-9_]*"));//Variable
+        tknmeaning.add(new TknMeaning(Token.EQUALS, "\\="));
+        tknmeaning.add(new TknMeaning(Token.SAVE, "save"));//Special function (2 parameters)
+        tknmeaning.add(new TknMeaning(Token.QUOTE, "\\'"));
+        tknmeaning.add(new TknMeaning(Token.COMMA, "\\,"));
     }
     /**
      * Algorithm to convert a strin into tokens

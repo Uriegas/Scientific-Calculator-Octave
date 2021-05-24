@@ -14,7 +14,7 @@ enum Token_Type{
  * Represents Operators, Operands and Agrupation tokens.
  * Applying the type and the value (string)
  */
-public class Token {
+public class Token {//This vars are ids used in Tokenizer and Parser
     public static final int EPSILON = 0;
     public static final int PLUSMINUS = 1;
     public static final int MULTDIV = 2;
@@ -25,6 +25,9 @@ public class Token {
     public static final int NUMBER = 7;
     public static final int VARIABLE = 8;
     public static final int EQUALS = 9;
+    public static final int SAVE = 10;//Add special 2 parameters function
+    public static final int QUOTE = 11;//Used in read_func
+    public static final int COMMA = 12;//Used in save_func
     private Token_Type type;
     private String value;
     
