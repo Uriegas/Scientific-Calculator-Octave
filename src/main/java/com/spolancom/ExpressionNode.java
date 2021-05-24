@@ -16,4 +16,5 @@ public interface ExpressionNode {
     
     public int getType();
     public double getValue();
+    public String toString();
 }

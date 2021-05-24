@@ -31,4 +31,10 @@ public class SaveNode implements ExpressionNode {
         //Here instantiate save class and perform operation
         return 0;
     }
+    /**
+     * Recursive toString method
+     */
+    public String toString(){
+        return "save( " + expression.toString() + ", '" + file_name + "')";
+    }
 }

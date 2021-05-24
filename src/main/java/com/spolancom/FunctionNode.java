@@ -56,4 +56,20 @@ public class FunctionNode implements ExpressionNode {
             default: throw new EvaluationException("Function " + func_type + "not valid");
         }
     }
+    /**
+     * Recursive toString method
+     */
+    public String toString(){
+        String s = "";
+        switch(func_type){
+            case SIN: s += "sin( " + arguments.getFirst().toString(); break;
+            case COS: s += "cos( " + arguments.getFirst().toString(); break;
+            case TAN: s += "tan( " + arguments.getFirst().toString(); break;
+            case POW: s += "pow( " + arguments.getFirst().toString() + ", " + arguments.getLast().toString(); break;
+            case SQRT: s += "sqrt( " + arguments.getFirst().toString(); break;
+            case READ: s += "read( " + arguments.getFirst().toString(); break;
+            default: s += " ";
+        }
+        return s += " )";
+    }
 }

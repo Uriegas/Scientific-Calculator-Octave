@@ -36,4 +36,13 @@ public class AdditionNode extends SequenceNode {
         }
         return sum;
     }
+    /**
+     * Recursive toString method
+     */
+    public String toString(){
+        String s = "( 0.0";
+        for(Term t : terms)
+            s += (t.positive) ? ( " + " + t.node.toString()) : (" - " + t.node.toString());
+        return s += " )";
+    }
 }

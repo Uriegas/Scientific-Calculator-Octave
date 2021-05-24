@@ -18,4 +18,10 @@ public class VarNode implements ExpressionNode {
         else
             return var_value;
     }
+    /**
+     * Recursive toString method
+     */
+    public String toString(){
+        return var_name;
+    }
 }

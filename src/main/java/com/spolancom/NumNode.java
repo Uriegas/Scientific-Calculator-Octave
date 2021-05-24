@@ -25,4 +25,10 @@ public class NumNode implements ExpressionNode {
     public int getType(){
         return NUM_NODE;
     }
+    /**
+     * Recursive toString method
+     */
+    public String toString(){
+        return String.valueOf(value);
+    }
 }

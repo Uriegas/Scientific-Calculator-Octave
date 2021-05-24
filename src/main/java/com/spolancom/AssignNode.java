@@ -30,4 +30,10 @@ public class AssignNode implements ExpressionNode {
      */
     public void saveToEnvironment(){
     }
+    /**
+     * Recursive toString method
+     */
+    public String toString(){
+        return var_name + " = " + expression.toString();
+    }
 }

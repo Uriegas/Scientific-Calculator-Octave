@@ -29,10 +29,19 @@ public class MulNode extends SequenceNode {
      * Implements recursion
      */
     public double getValue(){
-        double mul = 0.0;
+        double mul = 1.0;
         for(Term t : terms){//If positive return a summation, if negative a substraction
             mul = (t.positive) ? (mul * t.node.getValue()) : (mul / t.node.getValue());
         }
         return mul;
+    }
+    /**
+     * Recursive toString method
+     */
+    public String toString(){
+        String s = "( 0.0";
+        for(Term t : terms)
+            s += (t.positive) ? ( " * " + t.node.toString()) : (" / " + t.node.toString());
+        return s += " )";
     }
 }
