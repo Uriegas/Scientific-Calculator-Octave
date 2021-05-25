@@ -2,7 +2,8 @@ package com.spolancom;
 
 import java.util.ArrayList;
 
-public class Interpreter implements Exp.Visitor<Double> {
+public class Interpreter implements Exp.Visitor<Double>{
+    //We dont implement function scope, just global variables
     public Environment envmnt;
     /**
      * Just initialize the environment (map of values)
@@ -11,8 +12,55 @@ public class Interpreter implements Exp.Visitor<Double> {
      */
     public Interpreter(){
         envmnt = new Environment();
-        envmnt.define("x", "4.0");
-        envmnt.define("y", new Exp.BinaryNode(new Exp.NumberNode("4"), new Token(Token.PLUS, "+"), new Exp.NumberNode("5")));//y = 4+5
+        envmnt.define("x", "4.0");//Test variable
+        //Defin a print function
+        envmnt.define("print", new FuncCallable(){
+            @Override
+            public int arity(){return 1;}
+            @Override
+            public Object call(Interpreter interpreter, ArrayList<String> arguments){
+                try{
+                    System.out.println(arguments.get(0));
+                }
+                catch(Exception e){
+                    throw new EnvironmentException("Cannot use: " + arguments.get(0) + "in print function");
+                }
+                return 0.0;
+            }
+        });
+        /**
+         * Define sin function
+         */
+        envmnt.define("sin", new FuncCallable(){
+            @Override
+            public int arity(){return 1;}
+            @Override
+            public Object call(Interpreter interpreter, ArrayList<String> arguments){
+                return Math.sin(Double.parseDouble(arguments.get(0)));
+            }
+        });
+        /**
+         * Define cos function
+         */
+        envmnt.define("cos", new FuncCallable(){
+            @Override
+            public int arity(){return 1;}
+            @Override
+            public Object call(Interpreter interpreter, ArrayList<String> arguments){
+                return Math.cos(Double.parseDouble(arguments.get(0)));
+            }
+        });
+        /**
+         * Define tan function
+         */
+        envmnt.define("tan", new FuncCallable(){
+            @Override
+            public int arity(){return 1;}
+            @Override
+            public Object call(Interpreter interpreter, ArrayList<String> arguments){
+                return Math.tan(Double.parseDouble(arguments.get(0)));
+            }
+        });
     }
     /**
      * Add the value and expression to the environment
@@ -31,11 +79,27 @@ public class Interpreter implements Exp.Visitor<Double> {
      */
     @Override
     public Double visitCallExpr(Exp.CallNode expr){
-//        Object callee = evalaute(expr.callee);
-//        ArrayList<Object> arguments = new ArrayList<>();
-//        for(Exp arg : arguments)
-//            arguments.add(arg.accept(arg));
-        return 0.0;
+        try{
+            Object func = envmnt.get(expr.name);
+            if(func instanceof FuncCallable){
+                FuncCallable f = (FuncCallable)func;
+                if(f.arity() != expr.arguments.size())
+                    throw new EnvironmentException("Incorrect nomber of parameters for function" + expr.name);
+                else{
+                    ArrayList<String> args = new ArrayList<String>();
+                    for(Exp arg : expr.arguments){
+                        args.add(String.valueOf(evaluate(arg)));
+                    }
+                    return (Double)f.call(this, args);
+                }
+            }
+            else{
+                throw new EnvironmentException("Incorrect nomber of parameters for function" + expr.name);
+            }
+            
+        }catch(Exception e){
+            throw new EnvironmentException("This function doesn't exist");
+        }
     }
     /**
      * Evaluate inner expression an return result
@@ -58,7 +122,7 @@ public class Interpreter implements Exp.Visitor<Double> {
      * Here we search it in the environment
      */
     @Override
-    public Double visitVariableExpr(Exp.Variable expr){
+    public Double visitVariableExpr(Exp.Variable expr){//We are searching for variables when their value is just their string, this are strings we can change the parser to accept arguments in '' as strings its var_name = value
         String var_name = expr.name;//Get the name of the token
         Object value = envmnt.get(var_name);
         if(value instanceof String){
