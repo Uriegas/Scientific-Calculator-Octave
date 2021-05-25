@@ -12,6 +12,7 @@ public class Interpreter implements Exp.Visitor<Double> {
     public Interpreter(){
         envmnt = new Environment();
         envmnt.define("x", "4.0");
+        envmnt.define("y", new Exp.BinaryNode(new Exp.NumberNode("4"), new Token(Token.PLUS, "+"), new Exp.NumberNode("5")));//y = 4+5
     }
     /**
      * Add the value and expression to the environment
@@ -60,12 +61,16 @@ public class Interpreter implements Exp.Visitor<Double> {
     public Double visitVariableExpr(Exp.Variable expr){
         String var_name = expr.name;//Get the name of the token
         Object value = envmnt.get(var_name);
-        if(value instanceof String)
+        if(value instanceof String){
             try{
                 return Double.parseDouble(value.toString());
             }catch(Exception e){
                 throw new EnvironmentException("Cannot convert " + var_name + " to number");
             }
+        }
+        else if(value instanceof Exp){
+            return evaluate((Exp) value);
+        }
 //        if(value instanceof ArrayList){
 //            try{
 //                for(Object v : value){

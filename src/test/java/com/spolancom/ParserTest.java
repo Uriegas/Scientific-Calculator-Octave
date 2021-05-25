@@ -23,7 +23,7 @@ public class ParserTest {
     @Test
     public void testVariables(){
         Parser p = new Parser();
-        Exp tree = p.parse("3*2^(x+3)");
+        Exp tree = p.parse("3*2^(y+3)");
         Interpreter evalVisitor = new Interpreter();
         Object result = tree.accept(evalVisitor);
         PrintTree visit = new PrintTree();
