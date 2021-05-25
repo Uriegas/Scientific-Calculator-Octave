@@ -1,5 +1,6 @@
 package com.spolancom;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -85,9 +86,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Advance to the next
+     * @return The previous token before advancing
+     */
     public Token advance() {
         current++;
-        return currentToken = tokens.get(current);
+        currentToken = tokens.get(current);
+        return previousToken();
     }
 
     /**
@@ -169,12 +175,34 @@ public class Parser {
     }
 
     private Exp pow() {// pow -> primary "^" primary
-        Exp exp = primary();
+        Exp exp = call();
         if (currentToken.getToken() == Token.POW) {
             Token operator = currentToken;
             advance();
-            Exp right = primary();
+            Exp right = call();
             exp = new Exp.BinaryNode(exp, operator, right);
+        }
+        return exp;
+    }
+
+    /**
+     * Grammar rule for a function call
+     * In the future we need to change the distintion between variable and function
+     * To abstract it to only an identifier
+     * @return
+     */
+    private Exp call(){//call -> primary ( "(" arguments? ")" )*
+        Exp exp = primary();
+        if((previousToken().getToken() == Token.FUNCTION || previousToken().getToken() == Token.VARIABLE) && currentToken.getToken() == Token.OPEN_PARENTHESIS){//If the previous token is not a number or expression and the current token is a prenthesis
+            ArrayList<Exp> arguments = new ArrayList<>();
+            while(currentToken.getToken() != Token.CLOSE_PARENTHESIS){
+                do{
+                    advance();
+                    arguments.add(expression());
+                }while(currentToken.getToken() == Token.COMMA);
+                advance();
+                return new Exp.CallNode(exp, previousToken(), arguments);
+            }
         }
         return exp;
     }
@@ -191,8 +219,17 @@ public class Parser {
             }
             return new Exp.GroupingNode(exp);
         }
+        else if(currentToken.getToken() == Token.FUNCTION){
+            advance();
+            return new Exp.NumberNode(previousToken().getValue());
+        }
         throw new ParserException("Missing token");
     }
+
+//    private Exp arguments(){
+//        ArrayList<Exp> arguments = new ArrayList<>();
+//        if(!)
+//    }
 
     public boolean match(Token_Type... types) {
         for (Token_Type type : types)
