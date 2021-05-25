@@ -20,7 +20,7 @@ public class Tokenizer {
         tokens = new LinkedList<Token>();
         tknmeaning = new LinkedList<TknMeaning>();
         //Defining tokens meaning (Tokens grammar)
-        tknmeaning.add(new TknMeaning(Token.PLUS, "\\+|-"));
+        tknmeaning.add(new TknMeaning(Token.PLUS, "\\+"));
         tknmeaning.add(new TknMeaning(Token.MINUS, "-"));
         tknmeaning.add(new TknMeaning(Token.MULT, "\\*"));
         tknmeaning.add(new TknMeaning(Token.DIV, "\\/"));
