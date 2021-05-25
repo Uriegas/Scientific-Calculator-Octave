@@ -94,8 +94,8 @@ public abstract class Exp {
      * Node that handles a Number
      */
     static class NumberNode extends Exp {
-        public Object value;
-        NumberNode(Object value) {
+        public String value;
+        NumberNode(String value) {
         this.value = value;
         }
 
