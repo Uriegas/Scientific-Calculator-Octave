@@ -232,10 +232,15 @@ public class Parser {
      * @return Expression node 
      */
     private Exp primary() {// primary -> NUMBER | IDENTIFIER | "(" expression ")"
-        if (currentToken.getToken() == Token.IDENTIFIER || currentToken.getToken() == Token.NUMBER) {
+        if (currentToken.getToken() == Token.IDENTIFIER) {
+            advance();
+            return new Exp.Variable(previousToken());
+        }
+        else if (currentToken.getToken() == Token.NUMBER) {
             advance();
             return new Exp.NumberNode(previousToken().getValue());
-        } else if (currentToken.getToken() == Token.OPEN_PARENTHESIS) {
+        }
+        else if (currentToken.getToken() == Token.OPEN_PARENTHESIS) {
             advance();
             Exp exp = expression();
             if (currentToken.getToken() != Token.CLOSE_PARENTHESIS) {

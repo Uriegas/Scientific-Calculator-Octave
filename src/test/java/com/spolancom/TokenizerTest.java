@@ -24,7 +24,7 @@ public class TokenizerTest {
             System.out.println( tokenizer.toString() );
         }
         Stack<String> result = new Stack<String>();
-        result.add("[\n7: save\n3: (\n7: f1\n3: (\n7: data\n4: )\n12: ,\n11: '\n13: output.txt\n11: '\n4: )\n0: null\n]\n");
+        result.add("[\n6: save\n7: (\n6: f1\n7: (\n6: data\n8: )\n12: ,\n11: '\n6: output.txt\n11: '\n8: )\n0: null\n]\n");
         System.out.println(result.lastElement());
         assertEquals(tokenizer.toString(), result.lastElement());
     }

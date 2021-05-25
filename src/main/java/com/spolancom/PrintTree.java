@@ -10,7 +10,7 @@ public class PrintTree implements Exp.Visitor<String> {
      */
     @Override
     public String visitAssignExpr(Exp.AssignNode expr){
-        return expr.name.getValue() + " = " + expr.value.accept(this);
+        return expr.name + " = " + expr.value.accept(this);
     }
     /**
      * Search for the function in the environment
@@ -42,7 +42,7 @@ public class PrintTree implements Exp.Visitor<String> {
     }
     @Override
     public String visitVariableExpr(Exp.Variable expr){
-        return expr.name.getValue();//Get the name of the token
+        return expr.name;//Get the name of the token
         //return lookupVariable(expr.name, expr);
     }
     /**

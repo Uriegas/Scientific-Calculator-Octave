@@ -14,12 +14,20 @@ public class ParserTest {
     @Test
     public void testEvaluation(){
         Parser p = new Parser();
-//        ExpressionNode tree = p.parse("3*2^4 + sqrt(1+3)");
-//        double result = tree.getValue();
-//        assertEquals(tree.getValue(), 50, 0);
-        Exp tree = p.parse("3*2^4 + sqrt(1+3)");
+        Exp tree = p.parse("3*2^(4+3)");
+        Interpreter evalVisitor = new Interpreter();
+        Object result = tree.accept(evalVisitor);
         PrintTree visit = new PrintTree();
-        System.out.println(tree.accept(visit));
+        System.out.println("Expression is: " + tree.accept(visit) + "\nValue is: " + String.valueOf(result));
+    }
+    @Test
+    public void testVariables(){
+        Parser p = new Parser();
+        Exp tree = p.parse("3*2^(x+3)");
+        Interpreter evalVisitor = new Interpreter();
+        Object result = tree.accept(evalVisitor);
+        PrintTree visit = new PrintTree();
+        System.out.println("Expression is: " + tree.accept(visit) + "\nValue is: " + String.valueOf(result));
     }
     @Test
     public void testFunctionCall(){

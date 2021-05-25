@@ -28,10 +28,10 @@ public abstract class Exp {
      * Node that handles assignment operations
      */
     static class AssignNode extends Exp{
-        public Token name;
+        public String name;
         public Exp value;
-        public AssignNode(Token name, Exp child){
-            this.name = name;
+        public AssignNode(Token t, Exp child){
+            this.name = t.getValue();
             this.value = child;
         }
         @Override
@@ -108,9 +108,9 @@ public abstract class Exp {
      * Node that handles variables
      */
     static class Variable extends Exp {
-        public Token name;
-        Variable(Token name) {
-            this.name = name;
+        public String name;
+        Variable(Token t) {
+            this.name = t.getValue();
         }
 
         @Override

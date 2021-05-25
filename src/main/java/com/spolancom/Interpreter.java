@@ -6,9 +6,12 @@ public class Interpreter implements Exp.Visitor<Double> {
     public Environment envmnt;
     /**
      * Just initialize the environment (map of values)
+     * Here we can load all previous functions
+     * Or variables that we want. Ex. PI.
      */
     public Interpreter(){
         envmnt = new Environment();
+        envmnt.define("x", "4.0");
     }
     /**
      * Add the value and expression to the environment
@@ -17,6 +20,7 @@ public class Interpreter implements Exp.Visitor<Double> {
      */
     @Override
     public Double visitAssignExpr(Exp.AssignNode expr){
+        envmnt.define(expr.name, expr.value);
         return evaluate(expr.value);
     }
     /**
@@ -54,10 +58,24 @@ public class Interpreter implements Exp.Visitor<Double> {
      */
     @Override
     public Double visitVariableExpr(Exp.Variable expr){
-        String var_name = expr.name.getValue();//Get the name of the token
+        String var_name = expr.name;//Get the name of the token
         Object value = envmnt.get(var_name);
-        //return lookupVariable(expr.name, expr);
-        return Double.parseDouble(value);
+        if(value instanceof String)
+            try{
+                return Double.parseDouble(value.toString());
+            }catch(Exception e){
+                throw new EnvironmentException("Cannot convert " + var_name + " to number");
+            }
+//        if(value instanceof ArrayList){
+//            try{
+//                for(Object v : value){
+//                    
+//                }
+//            }catch(Exception e){
+//                throw new EnvironmentException("Not valid data for variable" + var_name);
+//            }
+//        }
+        throw new EnvironmentException("No match type for the variable " + var_name);
     }
     /**
      * This evalutes most of the mathematical functions
