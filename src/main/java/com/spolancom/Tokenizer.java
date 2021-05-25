@@ -7,6 +7,11 @@ import java.util.regex.Pattern;
  * Simple tokenizer implementing regex
  * It takes a string and divides it into tokens
  * It works with multiple variables
+ * 
+ * Lexical Grammar:
+ * NUMBER -> DIGIT+ ( "." DIGIT+ )?
+ * IDENTIFIER -> ALPHA ( ALPHA | DIGIT )*
+ * ALPHA -> "a" ... "z" | "A" ... "Z" | "_"
  */
 public class Tokenizer {
     private LinkedList<Token> tokens;
@@ -19,7 +24,8 @@ public class Tokenizer {
         tknmeaning.add(new TknMeaning(Token.MULTDIV, "\\*|/"));
         tknmeaning.add(new TknMeaning(Token.OPEN_PARENTHESIS, "\\(|\\["));
         tknmeaning.add(new TknMeaning(Token.CLOSE_PARENTHESIS, "\\)|\\]"));
-        tknmeaning.add(new TknMeaning(Token.FUNCTION, "sin|cos|tan|sqrt|\\^|read"));
+        tknmeaning.add(new TknMeaning(Token.POW, "\\^"));
+        tknmeaning.add(new TknMeaning(Token.FUNCTION, "sin|cos|tan|sqrt|read"));
         tknmeaning.add(new TknMeaning(Token.NUMBER, "[0-9]+"));
         tknmeaning.add(new TknMeaning(Token.VARIABLE, "(\\w+\\.\\w+)"));//File
         tknmeaning.add(new TknMeaning(Token.VARIABLE, "[a-zA-Z][a-zA-Z0-9_]*"));//Variable
@@ -33,7 +39,7 @@ public class Tokenizer {
      * Implements regex analysis
      * @param s
      */
-    public void tokenize(String st){
+    public LinkedList<Token> tokenize(String st){
         String s = st; //Because of internal mods
         //Init tokens
         tokens.clear();
@@ -58,6 +64,7 @@ public class Tokenizer {
             if(!match) throw new TokenizerException("Invalid input in: " + s);
         }
         tokens.add(new Token(Token.EPSILON, null));//Add end of line token
+        return tokens;
     }
     /**
      * Get the list of tokens
