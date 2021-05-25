@@ -16,16 +16,18 @@ enum Token_Type{
  */
 public class Token {//This vars are ids used in Tokenizer and Parser
     public static final int EPSILON = 0;
-    public static final int PLUSMINUS = 1;
-    public static final int MULTDIV = 2;
-    public static final int POW = 3;
-    public static final int FUNCTION = 4;
-    public static final int OPEN_PARENTHESIS = 5;
-    public static final int CLOSE_PARENTHESIS = 6;
-    public static final int NUMBER = 7;
-    public static final int VARIABLE = 8;
-    public static final int EQUALS = 9;
-    public static final int SAVE = 10;//Add special 2 parameters function
+    public static final int PLUS = 1;
+    public static final int MINUS = 2;
+    public static final int MULT = 3;
+    public static final int DIV = 4;
+    public static final int POW = 5;
+    //public static final int FUNCTION = 6;
+    public static final int IDENTIFIER = 6;
+    public static final int OPEN_PARENTHESIS = 7;
+    public static final int CLOSE_PARENTHESIS = 8;
+    public static final int NUMBER = 9;
+    //public static final int VARIABLE = 10;
+    public static final int EQUALS = 10;
     public static final int QUOTE = 11;//Used in read_func
     public static final int COMMA = 12;//Used in save_func
     private Token_Type type;
