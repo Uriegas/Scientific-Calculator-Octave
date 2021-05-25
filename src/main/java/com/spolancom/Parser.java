@@ -211,15 +211,18 @@ public class Parser {
     private Exp call(){//call -> primary ( "(" arguments? ")" )*
         Exp exp = primary();
         if(previousToken().getToken() == Token.IDENTIFIER && currentToken.getToken() == Token.OPEN_PARENTHESIS){//If the previous token is not a number or expression and the current token is a prenthesis
+            Token fun_name = previousToken();
             ArrayList<Exp> arguments = new ArrayList<>();
             while(currentToken.getToken() != Token.CLOSE_PARENTHESIS){
                 do{
                     advance();
                     arguments.add(expression());
                 }while(currentToken.getToken() == Token.COMMA);
+                Exp call = new Exp.CallNode(fun_name, arguments);
                 advance();
-                return new Exp.CallNode(exp, previousToken(), arguments);
+                return call;
             }
+            throw new ParserException("Cannot call expressions: " + previousToken());
         }
         return exp;
     }

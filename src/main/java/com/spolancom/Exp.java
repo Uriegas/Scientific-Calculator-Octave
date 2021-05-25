@@ -61,13 +61,11 @@ public abstract class Exp {
      * Node that handles function calls
      */
     static class CallNode extends Exp {
-        public Exp callee;
-        public Token paren;
+        public String name;
         public List<Exp> arguments;
 
-        public CallNode(Exp callee, Token paren, List<Exp> arguments) {
-            this.callee = callee;
-            this.paren = paren;
+        public CallNode(Token callee, List<Exp> arguments) {
+            this.name = callee.getValue();
             this.arguments = arguments;
         }
 

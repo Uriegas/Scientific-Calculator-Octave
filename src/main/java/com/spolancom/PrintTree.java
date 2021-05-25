@@ -19,7 +19,7 @@ public class PrintTree implements Exp.Visitor<String> {
     @Override
     public String visitCallExpr(Exp.CallNode expr){
         String s = "";
-        s += expr.callee.accept(this) + "(";
+        s += expr.name + "(";
         for(Exp arg : expr.arguments)
             s += arg.accept(this) + ", ";
         s = s.substring(0, s.length()-1);
