@@ -123,9 +123,9 @@ public class Parser {
         currentToken = tokens.get(current);
         // Recursive descendent parsing implementation
         Exp e = expression();
-        if(currentToken != null || currentToken.getToken() != Token.EPSILON)
-            throw new ParserException("Invalid token: " + currentToken.toString());
-        return e;
+        if(currentToken.getType() == null || currentToken.getToken() == Token.EPSILON)
+            return e;
+        throw new ParserException("Invalid token: " + currentToken.toString());
     }
 
     /**
@@ -145,7 +145,7 @@ public class Parser {
      * @return Expression node
      */
     private Exp assignment() {// assignment -> IDENTIFIER "=" expression | term
-        if ((currentToken.getToken() == Token.VARIABLE) && (nextToken().getToken() == Token.EQUALS)) {
+        if ((currentToken.getToken() == Token.IDENTIFIER) && (nextToken().getToken() == Token.EQUALS)) {
             Token name = currentToken;// Point to the name of the token
             advance();// The EQUAL sign "="
             advance();// Point to next token to parse expression
@@ -161,7 +161,7 @@ public class Parser {
      */
     private Exp term() {// term -> factor ( ( "-" | "+" ) factor )*
         Exp exp = factor();
-        while (currentToken.getToken() == Token.PLUSMINUS) {
+        while (currentToken.getToken() == Token.PLUS || currentToken.getToken() == Token.MINUS) {
             Token operator = currentToken;
             advance();
             Exp right = factor();
@@ -177,7 +177,7 @@ public class Parser {
      */
     private Exp factor() {// factor -> pow ( ( "/" | "*" ) pow )*
         Exp exp = pow();
-        while (currentToken.getToken() == Token.MULTDIV) {
+        while (currentToken.getToken() == Token.MULT || currentToken.getToken() == Token.DIV) {
             Token operator = currentToken;
             advance();
             Exp right = pow();// call or maybe we should redifine unary to extend to call
@@ -210,7 +210,7 @@ public class Parser {
      */
     private Exp call(){//call -> primary ( "(" arguments? ")" )*
         Exp exp = primary();
-        if((previousToken().getToken() == Token.FUNCTION || previousToken().getToken() == Token.VARIABLE) && currentToken.getToken() == Token.OPEN_PARENTHESIS){//If the previous token is not a number or expression and the current token is a prenthesis
+        if(previousToken().getToken() == Token.IDENTIFIER && currentToken.getToken() == Token.OPEN_PARENTHESIS){//If the previous token is not a number or expression and the current token is a prenthesis
             ArrayList<Exp> arguments = new ArrayList<>();
             while(currentToken.getToken() != Token.CLOSE_PARENTHESIS){
                 do{
@@ -232,7 +232,7 @@ public class Parser {
      * @return Expression node 
      */
     private Exp primary() {// primary -> NUMBER | IDENTIFIER | "(" expression ")"
-        if (currentToken.getToken() == Token.NUMBER || currentToken.getToken() == Token.VARIABLE) {
+        if (currentToken.getToken() == Token.IDENTIFIER || currentToken.getToken() == Token.NUMBER) {
             advance();
             return new Exp.NumberNode(previousToken().getValue());
         } else if (currentToken.getToken() == Token.OPEN_PARENTHESIS) {
@@ -243,10 +243,6 @@ public class Parser {
             }
             advance();
             return new Exp.GroupingNode(exp);
-        }
-        else if(currentToken.getToken() == Token.FUNCTION){
-            advance();
-            return new Exp.NumberNode(previousToken().getValue());
         }
         throw new ParserException("Missing token");
     }
