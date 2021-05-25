@@ -4,29 +4,20 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
- * Grammar:
- * program -> expression* EOT
+ * Parser implementing a defined grammar and
+ * the recursive descendent algorithm of type LL(2).
  * 
+ * Grammar:
  * expression -> assignment
  * assignment -> IDENTIFIER "=" expression | term
- * 
  * term -> factor ( ( "-" | "+" ) factor )*
  * factor -> pow ( ( "/" | "*" ) pow )*
  * pow -> call ^ call | call
  * call -> IDENTIFIER "(" arguments? ")"
  * primary -> NUMBER | IDENTIFIER | "(" expression ")"
  * 
- * arguments -> expression | IDENTIFIER ( "," expression | IDENTIFIER )*
- * 
- */
-
-/**
- * 
- * Grammar from
- */
-
-/**
- * Parser implementing a recursive descendent algorithm. It parses = tokens too.
+ * This implementatino is based on:
+ * https://www.craftinginterpreters.com/appendix-i.html
  */
 public class Parser {
     LinkedList<Token> tokens;
@@ -65,9 +56,9 @@ public class Parser {
     }
 
     /**
-     * Method that pops current token and makes the variable currentToken point to
-     * the newer first token.
-     * 
+     * Just get the next token in the tokens
+     * Although we define an EPSILON the parser is
+     * design to handle null tokens just returning the valid one
      * @return The newer token
      */
     public Token nextToken() {
@@ -77,7 +68,11 @@ public class Parser {
             return currentToken = new Token(Token.EPSILON, null);// EOT:END OF TOKENS
         }
     }
-
+    /**
+     * Get the last token
+     * DOESN'T move the currenToken
+     * @return previous token
+     */
     public Token previousToken() {
         try {
             return tokens.get(current - 1);
@@ -88,6 +83,8 @@ public class Parser {
 
     /**
      * Advance to the next
+     * MOVES the currentToken to the next token
+     * The program handles null tokens
      * @return The previous token before advancing
      */
     public Token advance() {
@@ -97,9 +94,10 @@ public class Parser {
     }
 
     /**
-     * Actual method that parses the tokens Implements recursive descendent parsing
-     * 
-     * @return
+     * Actual method that parses the tokens 
+     * Implements recursive descendent parsing
+     * Parse from token list
+     * @return The root node
      */
     public Exp parse(LinkedList<Token> t) {
         tokens = (LinkedList<Token>) t.clone();
@@ -113,9 +111,9 @@ public class Parser {
     }
 
     /**
-     * Actual method that parses the tokens Implements recursive descendent parsing
-     * 
-     * @return expression node representing the tree
+     * Implements recursive descendent parsing
+     * Parse from string, use tokenizer
+     * @return root node
      */
     public Exp parse(String str) {
         // Reinit the current token just in case
@@ -125,22 +123,27 @@ public class Parser {
         currentToken = tokens.get(current);
         // Recursive descendent parsing implementation
         Exp e = expression();
-        // Error if we havent get EOT at the end of parsing
-        // if(currentToken.getToken() != Token.EPSILON)
-        // throw new ParserException("Syntax Error");
+        if(currentToken != null || currentToken.getToken() != Token.EPSILON)
+            throw new ParserException("Invalid token: " + currentToken.toString());
         return e;
     }
 
     /**
-     * Grammar implementation of Crafting Interpreters
-     * 
-     * @return
+     * Here starts the Parser aka grammar rules
+     * Everything the user enters is an expression
+     * Precedence is implemented backwards
+     * Lower precendes in the first rule
+     * Higher precende is the lowest rule
+     * @return root node
      */
-
     private Exp expression() {
         return assignment();
     }
-
+    /**
+     * Grammar rule to handle assignment
+     * Or pass to the next rule
+     * @return Expression node
+     */
     private Exp assignment() {// assignment -> IDENTIFIER "=" expression | term
         if ((currentToken.getToken() == Token.VARIABLE) && (nextToken().getToken() == Token.EQUALS)) {
             Token name = currentToken;// Point to the name of the token
@@ -151,7 +154,11 @@ public class Parser {
             return term();
         }
     }
-
+    /**
+     * Grammar rule to handle terms
+     * Or pass to the next rule
+     * @return Expression node
+     */
     private Exp term() {// term -> factor ( ( "-" | "+" ) factor )*
         Exp exp = factor();
         while (currentToken.getToken() == Token.PLUSMINUS) {
@@ -163,6 +170,11 @@ public class Parser {
         return exp;
     }
 
+    /**
+     * Grammar rule to handle factors
+     * Or pass to the next rule
+     * @return Expression node
+     */
     private Exp factor() {// factor -> pow ( ( "/" | "*" ) pow )*
         Exp exp = pow();
         while (currentToken.getToken() == Token.MULTDIV) {
@@ -174,6 +186,11 @@ public class Parser {
         return exp;
     }
 
+    /**
+     * Grammar rule to handle pow (^)
+     * Or pass to the next rule
+     * @return Expression node
+     */
     private Exp pow() {// pow -> primary "^" primary
         Exp exp = call();
         if (currentToken.getToken() == Token.POW) {
@@ -206,7 +223,14 @@ public class Parser {
         }
         return exp;
     }
-
+    /**
+     * Grammar rule to handle terminals
+     * (grammar tokens or leaf nodes)
+     * This is the last rule
+     * Highest precedence
+     * Recursivity is seen in: "(" expression ")"
+     * @return Expression node 
+     */
     private Exp primary() {// primary -> NUMBER | IDENTIFIER | "(" expression ")"
         if (currentToken.getToken() == Token.NUMBER || currentToken.getToken() == Token.VARIABLE) {
             advance();
@@ -217,6 +241,7 @@ public class Parser {
             if (currentToken.getToken() != Token.CLOSE_PARENTHESIS) {
                 throw new ParserException("Close parenthesis not found");
             }
+            advance();
             return new Exp.GroupingNode(exp);
         }
         else if(currentToken.getToken() == Token.FUNCTION){
@@ -225,132 +250,4 @@ public class Parser {
         }
         throw new ParserException("Missing token");
     }
-
-//    private Exp arguments(){
-//        ArrayList<Exp> arguments = new ArrayList<>();
-//        if(!)
-//    }
-
-    public boolean match(Token_Type... types) {
-        for (Token_Type type : types)
-            if (type.equals(currentToken.getType()))
-                return true;
-        return false;
-    }
-
-    /**
-     * Grammar implementation of CogitoLearning
-     */
-
-    /**
-     * Equality method, everything entered into the calculator is an equality,
-     * defined as: equality -> VARIABLE EQUALS expression equality -> expression
-     */
-    // private void equality(){
-    // if(currentToken.getToken() == Token.VARIABLE){
-    // Token previousToken = currentToken;
-    // nextToken();
-    // if(currentToken.getToken() == Token.EQUALS){
-    // nextToken();
-    // expression();
-    // }
-    // else{
-    // tokens.addFirst(previousToken);
-    // expression();//Doesnt know how to implement
-    // }
-    // }
-    // else
-    // expression();
-    // }
-    /**
-     * Evaluates a grammar rule aka Expression An expression is an math equality
-     * Example: f1 = x*3+14 If we dont find the = sign, we need to make an internal
-     * variable anyway
-     */
-    // private void expression(){
-    // signed_term();
-    // sum_op();
-    // }
-    // private void sum_op(){
-    // if(currentToken.getToken() == Token.PLUSMINUS){
-    // nextToken();
-    // term();
-    // sum_op();
-    // }
-    // //else
-    // //return epsilon
-    // }
-    // private void signed_term(){
-    // if(currentToken.getToken() == Token.PLUSMINUS){
-    // nextToken();
-    // term();
-    // }
-    // else
-    // term();
-    // }
-    // private void term(){
-    // factor();
-    // term_op();
-    // }
-    // private void term_op(){
-    // if(currentToken.getToken() == Token.MULTDIV){
-    // nextToken();
-    // signed_factor();
-    // term_op();
-    // }
-    // //else epsilon
-    // }
-    // private void signed_factor(){
-    // if(currentToken.getToken() == Token.PLUSMINUS){
-    // nextToken();
-    // factor();
-    // }
-    // else
-    // factor();
-    // }
-    // private void factor(){
-    // argument();
-    // factor_op();
-    // }
-    // private void factor_op(){
-    // if(currentToken.getToken() == Token.POW){
-    // nextToken();
-    // signed_factor();
-    // }
-    // //else epsilon
-    // }
-    // private void argument(){
-    // if(currentToken.getToken() == Token.OPEN_PARENTHESIS){
-    // nextToken();
-    // expression();
-    // if(currentToken.getToken() != Token.CLOSE_PARENTHESIS)
-    // throw new ParserException();
-    // nextToken();
-    // }
-    // else if(currentToken.getToken() == Token.FUNCTION){
-    // nextToken();
-    // value();
-    // }
-    // else{
-    // value();
-    // }
-    // }
-    // private void value(){
-    // if(currentToken.getToken() == Token.VARIABLE){
-    // nextToken();
-    // }
-    // else if(currentToken.getToken() == Token.NUMBER){
-    // nextToken();
-    // }
-    // else
-    // throw new ParserException();
-    // }
-    // /**
-    // * Sum or minus operation for non-terminal tokens
-    // */
-    // private void non_terminal_sum(){
-    // if(currentToken.getToken() == Token.PLUSMINUS)
-    // nextToken();//Pop this token
-    // }
-
 }
