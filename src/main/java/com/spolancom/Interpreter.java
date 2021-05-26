@@ -7,7 +7,7 @@ public class Interpreter implements Exp.Visitor<Double>{
     public Environment envmnt;
     /**
      * Just initialize the environment (map of values)
-     * Here we can load all previous functions
+     * Here we can load all program defined functions
      * Or variables that we want. Ex. PI.
      */
     public Interpreter(){
@@ -59,6 +59,41 @@ public class Interpreter implements Exp.Visitor<Double>{
             @Override
             public Object call(Interpreter interpreter, ArrayList<String> arguments){
                 return Math.tan(Double.parseDouble(arguments.get(0)));
+            }
+        });
+        /**
+         * Define read function: Handles 2 types of files
+         * Xlsx and .equ, to load data and functions
+         */
+        envmnt.define("read", new FuncCallable(){
+            @Override
+            public int arity(){return 1;}
+            @Override
+            public Object call(Interpreter interpreter, ArrayList<String> arguments){
+                ReadFunction read = new ReadFunction();
+                try{
+                    envmnt = read.ReadFile(arguments.get(0), interpreter);
+                }catch(Exception e){
+                    throw new EnvironmentException("Could'nt read file " + arguments.get(0));
+                }
+                return "Succesful file reading in " + arguments.get(0);
+            }
+        });
+        /**
+         * Define save function
+         */
+        envmnt.define("save", new FuncCallable(){
+            @Override
+            public int arity(){return 2;}
+            @Override
+            public Object call(Interpreter interpreter, ArrayList<String> arguments){
+                SaveFunction s = new SaveFunction();
+                try{
+                    s.writetoFile(arguments.get(1), arguments.get(0));
+                }catch(Exception e){
+                    throw new EnvironmentException("Couldn't write to file " + arguments.get(1));
+                }
+                return "Succesful file writin in " + arguments.get(1);
             }
         });
     }
@@ -186,5 +221,12 @@ public class Interpreter implements Exp.Visitor<Double>{
      */
     private Double evaluate(Exp e){
         return e.accept(this);
+    }
+
+    /**
+     * Get the environment
+     */
+    public Environment getEnv(){
+        return this.envmnt;
     }
 }

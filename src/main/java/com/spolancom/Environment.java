@@ -28,4 +28,16 @@ public class Environment {
         }
         throw new EnvironmentException("The variable or function: " + s + " doesn't exist in the environment");
     }
+    /**
+     * Get all of the hashmap. This should not throw errors
+     * @return everything that is inside the environment
+     */
+    public ArrayList<Object> getAll(){
+        ArrayList<Object> results = new ArrayList<Object>();
+        Iterator<String> mapIt = values.keySet().iterator();
+        while(mapIt.hasNext()){
+            results.add(values.get(mapIt.next()));
+        }
+        return results;
+    }
 }
