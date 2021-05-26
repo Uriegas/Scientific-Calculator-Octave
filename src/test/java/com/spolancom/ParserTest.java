@@ -2,56 +2,60 @@ package com.spolancom;
 
 import static org.junit.Assert.assertEquals;
 
+import java.security.DrbgParameters.Reseed;
+
 import org.junit.Test;
 /**
  * Test the Parser
  */
 public class ParserTest {
-    @Test
-    public void testAssignment(){
-
+    private Parser p;
+    private Interpreter evalVisit;
+    private PrintTree printVisit;
+    private Exp expression;
+    /**
+     * Initialize everything
+     */
+    public ParserTest(){
+        p = new Parser();
+        evalVisit = new Interpreter();
+        printVisit = new PrintTree();
     }
     @Test
     public void testEvaluation(){
-        Parser p = new Parser();
-        Exp tree = p.parse("3*2^(4+3)");
-        Interpreter evalVisitor = new Interpreter();
-        Object result = tree.accept(evalVisitor);
-        PrintTree visit = new PrintTree();
-        System.out.println("Expression is: " + tree.accept(visit) + "\nValue is: " + String.valueOf(result));
+        expression = p.parse("3*2^(4+3)");
+        Object result = expression.accept(evalVisit);
+
+        System.out.println("Expression is: " + expression.accept(printVisit) + "\nValue is: " + String.valueOf(result));
     }
     @Test
     public void testVariables(){
-        Parser p = new Parser();
-        Exp tree = p.parse("3*2^(y+3)");
-        Interpreter evalVisitor = new Interpreter();
-        Object result = tree.accept(evalVisitor);
-        PrintTree visit = new PrintTree();
-        System.out.println("Expression is: " + tree.accept(visit) + "\nValue is: " + String.valueOf(result));
+        expression = p.parse("3*2^(y+3)");
+        Object result = expression.accept(evalVisit);
+        System.out.println("Expression is: " + expression.accept(printVisit) + "\nValue is: " + String.valueOf(result));
     }
     @Test
     public void testFunctionCall(){
-        Parser p = new Parser();
-        Interpreter evalVisitor = new Interpreter();
-
        // Exp tree = p.parse("x = 10+10");
        // Object result = tree.accept(evalVisitor);
-        Exp tree = p.parse("print(x)");
-        Object result = tree.accept(evalVisitor);
-        PrintTree visit = new PrintTree();
-        System.out.println("Expression is: " + tree.accept(visit) + "\nReturn value is: " + String.valueOf(result));
-        tree = p.parse("sin(10+cos(x+2)-70)");
-        result = tree.accept(evalVisitor);
+        expression = p.parse("print(x)");
+        Object result = expression.accept(evalVisit);
+        System.out.println("Expression is: " + expression.accept(printVisit) + "\nReturn value is: " + String.valueOf(result));
+        expression = p.parse("sin(10+cos(x+2)-70)");
+        result = expression.accept(evalVisit);
         
-        System.out.println("Expression is: " + tree.accept(visit) + "\nReturn value is: " + String.valueOf(result));
+        System.out.println("Expression is: " + expression.accept(printVisit) + "\nReturn value is: " + String.valueOf(result));
+
         assertEquals(Math.sin((10.0+Math.cos(4+2))-70), Double.valueOf((Double)result), 0.01);
     }
     @Test
-    public void TestSAVE(){
-
+    public void TestREAD(){
+        expression = p.parse("data = read(archivo1.xlsx)");
     }
     @Test
-    public void TestREAD(){
-
+    public void testSAVE(){
+        TestREAD();
+        expression = p.parse("save(f1(data), output.txt)");
+        expression.accept(evalVisit);
     }
 }
