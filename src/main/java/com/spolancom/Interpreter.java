@@ -123,11 +123,18 @@ public class Interpreter implements Exp.Visitor<Double>{
                 else{
                     ArrayList<String> args = new ArrayList<String>();
                     for(Exp arg : expr.arguments){
-                        args.add(String.valueOf(evaluate(arg)));
+                        if(arg instanceof Exp.FileNode)
+                            args.add(arg.toString());
+                        else
+                            args.add(String.valueOf(evaluate(arg)));
                     }
                     return (Double)f.call(this, args);
                 }
             }
+            else if(func instanceof String || func instanceof Double)
+                return (Double)func;
+            else if(func instanceof Exp)
+                return evaluate((Exp)func);
             else{
                 throw new EnvironmentException("Incorrect nomber of parameters for function" + expr.name);
             }
@@ -170,16 +177,14 @@ public class Interpreter implements Exp.Visitor<Double>{
         else if(value instanceof Exp){
             return evaluate((Exp) value);
         }
-//        if(value instanceof ArrayList){
-//            try{
-//                for(Object v : value){
-//                    
-//                }
-//            }catch(Exception e){
-//                throw new EnvironmentException("Not valid data for variable" + var_name);
-//            }
-//        }
         throw new EnvironmentException("No match type for the variable " + var_name);
+    }
+    /**
+     * Im not gonna use this
+     */
+    @Override
+    public Double visitFileExpr(Exp.FileNode expr){
+        return 0.0;
     }
     /**
      * This evalutes most of the mathematical functions

@@ -52,4 +52,8 @@ public class PrintTree implements Exp.Visitor<String> {
     public String visitBinaryExpr(Exp.BinaryNode expr){
         return "( " + expr.left.accept(this) + expr.operator.getValue() + expr.right.accept(this) + " )";
     }
+    @Override
+    public String visitFileExpr(Exp.FileNode expr){
+        return expr.name;//Get the name of the token
+    }
 }

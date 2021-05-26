@@ -29,11 +29,10 @@ public class Tokenizer {
         tknmeaning.add(new TknMeaning(Token.POW, "\\^"));
         //tknmeaning.add(new TknMeaning(Token.FUNCTION, "sin|cos|tan|sqrt|read"));
         tknmeaning.add(new TknMeaning(Token.NUMBER, "[0-9]+"));
-        tknmeaning.add(new TknMeaning(Token.IDENTIFIER, "(\\w+\\.\\w+)"));//Allow points
+        tknmeaning.add(new TknMeaning(Token.FILE, "(\\'\\w+\\.\\w+\\')"));//Allow points
         tknmeaning.add(new TknMeaning(Token.IDENTIFIER, "[a-zA-Z][a-zA-Z0-9_]*"));//Variable
         tknmeaning.add(new TknMeaning(Token.EQUALS, "\\="));
         //tknmeaning.add(new TknMeaning(Token.SAVE, "save"));//Special function (2 parameters)
-        tknmeaning.add(new TknMeaning(Token.QUOTE, "\\'"));
         tknmeaning.add(new TknMeaning(Token.COMMA, "\\,"));
     }
     /**

@@ -1,5 +1,7 @@
 package com.spolancom;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,15 +19,17 @@ public class ReadFunction {
      * ReadFile method
      */
     public Environment ReadFile(String path, Interpreter i) throws Exception{
-        if(!path.endsWith(".equ") || !path.endsWith(".xslx"))
+        path = path.substring(1, path.length()-1);
+        if(!(path.endsWith(".equ") || path.endsWith(".xslx")))
             throw new EnvironmentException("Not valid file extension in path " + path);
         
         if(path.endsWith(".equ")){
-            File f = new File(path);
-            Scanner s = new Scanner(f);
+            System.out.println(path);
+            BufferedReader s = new BufferedReader(new FileReader(path));
+            String line = "";
 
-            while(s.hasNextLine()){
-                expressions.add(s.nextLine());
+            while((line = s.readLine()) != null){
+                expressions.add(line);
             }
             //Pass expressions to parser and put them into the environment
             Parser p = new Parser();

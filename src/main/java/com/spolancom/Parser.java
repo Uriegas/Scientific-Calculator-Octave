@@ -252,6 +252,10 @@ public class Parser {
             advance();
             return new Exp.GroupingNode(exp);
         }
+        else if(currentToken.getToken() == Token.FILE){
+            advance();
+            return new Exp.FileNode(previousToken());
+        }
         throw new ParserException("Missing token");
     }
 }

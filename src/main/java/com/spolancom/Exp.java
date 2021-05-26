@@ -14,6 +14,7 @@ public abstract class Exp {
         R visitNumberExpr(NumberNode expr);
         R visitVariableExpr(Variable expr);
         R visitBinaryExpr(BinaryNode expr);
+        R visitFileExpr(FileNode expr);
     }
     /**
      * Abstract function to evaluate a node
@@ -23,6 +24,7 @@ public abstract class Exp {
      * @return  the returns a type R defined latter by the user of the interface
      */
     public abstract <R> R accept(Visitor<R> visitor);
+    public abstract String toString();
 
     /**
      * Node that handles assignment operations
@@ -37,6 +39,10 @@ public abstract class Exp {
         @Override
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visitAssignExpr(this);
+        }
+        @Override
+        public String toString() {
+            return name;
         }
     }
     /**
@@ -56,6 +62,10 @@ public abstract class Exp {
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visitBinaryExpr(this);
         }
+        @Override
+        public String toString() {
+            return operator.getValue();
+        }
     }
     /**
      * Node that handles function calls
@@ -73,6 +83,10 @@ public abstract class Exp {
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visitCallExpr(this);
         }
+        @Override
+        public String toString() {
+            return name;
+        }
     }
     /**
      * Node that handles parenthesis
@@ -86,6 +100,10 @@ public abstract class Exp {
         @Override
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visitGroupingExpr(this);
+        }
+        @Override
+        public String toString() {
+            return expression.toString();
         }
     }
     /**
@@ -101,6 +119,10 @@ public abstract class Exp {
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visitNumberExpr(this);
         }
+        @Override
+        public String toString() {
+            return value;
+        }
     }
     /**
      * Node that handles variables
@@ -115,7 +137,29 @@ public abstract class Exp {
         public <R> R accept(Visitor<R> visitor) {
             return visitor.visitVariableExpr(this);
         }
-
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+    /**
+     * Node that handles files names
+     */
+    static class FileNode extends Exp {
+        public String name;
+        FileNode(Token t) {
+            name = t.getValue();
+            name = name.substring(1, name.length() - 1);
+            this.name = t.getValue();
+        }
+        @Override
+        public <R> R accept(Visitor<R> visitor) {
+            return visitor.visitFileExpr(this);
+        }
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 
 }

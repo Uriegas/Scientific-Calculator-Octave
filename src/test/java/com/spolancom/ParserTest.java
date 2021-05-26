@@ -2,8 +2,6 @@ package com.spolancom;
 
 import static org.junit.Assert.assertEquals;
 
-import java.security.DrbgParameters.Reseed;
-
 import org.junit.Test;
 /**
  * Test the Parser
@@ -30,7 +28,7 @@ public class ParserTest {
     }
     @Test
     public void testVariables(){
-        expression = p.parse("3*2^(y+3)");
+        expression = p.parse("3*2^(x+3)");
         Object result = expression.accept(evalVisit);
         System.out.println("Expression is: " + expression.accept(printVisit) + "\nValue is: " + String.valueOf(result));
     }
@@ -48,14 +46,17 @@ public class ParserTest {
 
         assertEquals(Math.sin((10.0+Math.cos(4+2))-70), Double.valueOf((Double)result), 0.01);
     }
-    @Test
-    public void TestREAD(){
-        expression = p.parse("data = read(archivo1.xlsx)");
-    }
-    @Test
-    public void testSAVE(){
-        TestREAD();
-        expression = p.parse("save(f1(data), output.txt)");
-        expression.accept(evalVisit);
-    }
+//    @Test
+//    public void TestREAD(){
+//        expression = p.parse("read('archivo1.equ')");
+//        expression.accept(evalVisit);
+//        //expression = p.parse("data = read(archivo1.xlsx)");
+//    }
+//    @Test
+//    public void testSAVE(){
+//        expression = p.parse("f1 = 2*x+10");
+//        expression.accept(evalVisit);
+//        expression = p.parse("save(f1(x), 'output.txt')");
+//        expression.accept(evalVisit);
+//    }
 }

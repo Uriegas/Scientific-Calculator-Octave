@@ -1,6 +1,5 @@
 package com.spolancom;
 
-import java.io.*;
 import java.util.*;
 
 /**
@@ -15,7 +14,6 @@ public class Calculator{
     private String input;
     private Parser parser;
     private Interpreter evalVisit;
-    private PrintTree printVisit;
     /**
      * Dummy constructor
      */
@@ -23,7 +21,6 @@ public class Calculator{
         input = "";
         parser = new Parser();//Evalute input
         evalVisit = new Interpreter();//Computation of input
-        printVisit = new PrintTree();//Print input for verification purposes
     }
     /**
      * Start calculator
@@ -43,8 +40,17 @@ public class Calculator{
 //                System.out.println("Procceded input maps to: " + result.accept(printVisit));
                 System.out.println(result.accept(evalVisit));
             }
-            catch(Exception e){
-                System.out.println("Syntax error");
+            catch(TokenizerException e){
+                System.out.println(e.getMessage());
+            }
+            catch(ParserException ex){
+                System.out.println(ex.getMessage());
+            }
+            catch(EvaluationException ex1){
+                System.out.println(ex1.getMessage());
+            }
+            catch(EnvironmentException ex2){
+                System.out.println(ex2.getMessage());
             }
             System.out.print("> ");
             //Save user input to in

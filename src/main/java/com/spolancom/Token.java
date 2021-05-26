@@ -28,7 +28,7 @@ public class Token {//This vars are ids used in Tokenizer and Parser
     public static final int NUMBER = 9;
     //public static final int VARIABLE = 10;
     public static final int EQUALS = 10;
-    public static final int QUOTE = 11;//Used in read_func
+    public static final int FILE = 11;//Used in read_func
     public static final int COMMA = 12;//Used in save_func
     private Token_Type type;
     private String value;

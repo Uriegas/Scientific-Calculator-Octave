@@ -1,6 +1,9 @@
 package com.spolancom;
 
-public class EnvironmentException extends RuntimeException {
+/**
+ * Erros about the environment aka Runtime
+ */
+public class EnvironmentException extends RuntimeException{
     public EnvironmentException(String m){
         super(m);
     }
